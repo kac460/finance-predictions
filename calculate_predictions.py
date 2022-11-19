@@ -2,13 +2,7 @@ from calendar import month_name
 from os import listdir
 from datetime import date
 import csv
-
-HARDCODED_PREDICTIONS = {
-    'Rent': 2150,
-    'Cellphone': 30,
-    'Car Insurance': 85.43,
-    'Internet': 59.99
-}
+from hardcoded_predictions import HARDCODED_PREDICTIONS
 
 AMOUNT = 'Amount'
 CATEGORY = 'Category'
