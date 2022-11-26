@@ -3,6 +3,7 @@ from os import listdir
 from datetime import date
 import csv
 from hardcoded_predictions import HARDCODED_PREDICTIONS
+from weights_functions import exponential_weights
 
 AMOUNT = 'Amount'
 CATEGORY = 'Category'
@@ -28,23 +29,36 @@ def get_category_amount_transaction_indexes(filename):
 
 TRANSACTION_FILE_FORMAT = '{} {} - Transactions.csv'
 START_YEAR = 2021
+START_MONTH_NUM = 1
+
+def filename_from_date(year, month_number):
+    month = month_name[month_number]
+    return TRANSACTION_FILE_FORMAT.format(month, year)
+
 '''
 Returns a list of transaction filenames, ordered (asc) by date based on filename
+Note - cutoff_month, cutoff_year is an EXCLUSIVE boundary
+so if we pass 2022, 11, then the last filename returned would be "October 2022 - Transactions.csv"
 '''
-def get_transaction_filenames():
+def get_transaction_filenames(cutoff_year, cutoff_month):
     transaction_filenames = []
     dir_filenames = listdir()
-    end_year = date.today().year
-    print(f'end year: {end_year}')
-    for year in range(START_YEAR, end_year + 1):
-        for month in month_name[1:]:  # first element is empty string -> index 1 for January, 2 for Feb, etc.
-            candidate_filename = TRANSACTION_FILE_FORMAT.format(month, year)
+    print(f'end year: {cutoff_year}')
+    year = START_YEAR
+    month_num = START_MONTH_NUM
+    while True:
+        while month_num <= 12:
+            if month_num == cutoff_month and year == cutoff_year:
+                return transaction_filenames
+            candidate_filename = filename_from_date(year, month_num)
             print(candidate_filename)
             if candidate_filename in dir_filenames:
                 transaction_filenames.append(candidate_filename)
             else:
-                return transaction_filenames
-    return transaction_filenames
+                raise Exception(f'Missing {candidate_filename}')
+            month_num += 1
+        month_num = 1
+        year += 1
 
 
 def category_expenses_for_file(filename):
@@ -63,9 +77,9 @@ def category_expenses_for_file(filename):
     return category_expenses
 
 
-# Returns reverse of [0.5, 0.25, 0.125, ..., 2^(-1*num_weights)]
-def exponential_weights(num_weights):
-    return [2**(-1*i) for i in reversed(range(1, num_weights+1))]
+def category_expenses_for_month(year, month_num):
+    filename = filename_from_date(year, month_num)
+    return category_expenses_for_file(filename)
 
 
 def weighted_avg(vals, weights):
@@ -77,8 +91,11 @@ def weighted_avg(vals, weights):
 Returns a dictionary in the form
 { category (string): prediction (float) }
 '''
-def compute_predictions():
-    filenames = get_transaction_filenames()
+def compute_predictions(year, month_num, weights_function=exponential_weights):
+    filenames = get_transaction_filenames(year, month_num)
+    if len(filenames) == 0:
+        print(f'NO FILES PRE-{month_num}/{year}')
+        return None
     category_expenses_for_files = [category_expenses_for_file(filename) for filename in filenames]
     predictions = {}
     # we assume all categories are present in the first category_expenses dict
@@ -86,46 +103,54 @@ def compute_predictions():
         category_expenses = [category_expense.get(category, 0) for category_expense in category_expenses_for_files]
         predictions[category] = HARDCODED_PREDICTIONS.get(category, weighted_avg(
             category_expenses,
-            exponential_weights(len(category_expenses))
+            weights_function(len(category_expenses))
         ))
     return predictions
-
-final_predictions = compute_predictions()
 
 def total_expenses_in_file(filename):
     category_expenses = category_expenses_for_file(filename)
     return sum([expense for category, expense in category_expenses.items()])
 
-def print_average_expenses():
-    filenames = get_transaction_filenames()
+def print_average_expenses(year, month_num):
+    filenames = get_transaction_filenames(year, month_num)
     print("-----------\n")
     print(f'AVERAGE MONTHLY EXPENSE: {sum([total_expenses_in_file(filename) for filename in filenames])/len(filenames)}')
     print("-----------\n")
-print_average_expenses()
 
-print("RAW:")
-print(final_predictions)
-print("-----------")
-ORDER_OF_CATEGORIES_COPIED = (
-    '''
-    Rent	
-    Cellphone	
-    Car Insurance	
-    Internet	
-    Electricity/Gas	
-    Water	
-    Groceries	
-    Transportation	
-    Health	
-    Other Necessity	
-    Home	
-    Restaurants	
-    Entertainment	
-    Vacation	
-    Gifts	
-    Other Non-Necessity	
-    '''
-)
-order_of_categories_copied_split = ORDER_OF_CATEGORIES_COPIED.split('\n')
-for category in order_of_categories_copied_split[1:len(order_of_categories_copied_split)-1]:
-    print(final_predictions.get(category.strip().replace('\t', '')))
+
+def main():
+    today = date.today()
+    final_predictions = compute_predictions(today.year, today.month)
+    print_average_expenses(today.year, today.month)
+
+    print("RAW:")
+    print(final_predictions)
+    print("-----------")
+    ORDER_OF_CATEGORIES_COPIED = (
+        '''
+        Rent	
+        Cellphone	
+        Car Insurance	
+        Internet	
+        Electricity/Gas	
+        Water	
+        Groceries	
+        Transportation	
+        Health	
+        Other Necessity	
+        Home	
+        Restaurants	
+        Entertainment	
+        Vacation	
+        Gifts	
+        Other Non-Necessity	
+        '''
+    )
+    order_of_categories_copied_split = ORDER_OF_CATEGORIES_COPIED.split('\n')
+    for category in order_of_categories_copied_split[1:len(order_of_categories_copied_split)-1]:
+        print(final_predictions.get(category.strip().replace('\t', '')))
+
+
+
+if __name__ == '__main__':
+    main()
