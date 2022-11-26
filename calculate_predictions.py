@@ -3,7 +3,7 @@ from os import listdir
 from datetime import date
 import csv
 from hardcoded_predictions import HARDCODED_PREDICTIONS
-from weights_functions import exponential_weights
+from weights_functions import incrementing_weights
 
 AMOUNT = 'Amount'
 CATEGORY = 'Category'
@@ -91,7 +91,7 @@ def weighted_avg(vals, weights):
 Returns a dictionary in the form
 { category (string): prediction (float) }
 '''
-def compute_predictions(year, month_num, weights_function=exponential_weights):
+def compute_predictions(year, month_num, weights_function=incrementing_weights):
     filenames = get_transaction_filenames(year, month_num)
     if len(filenames) == 0:
         print(f'NO FILES PRE-{month_num}/{year}')
