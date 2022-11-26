@@ -6,6 +6,6 @@ def exponential_weights(num_weights):
 def even_weights(num_weights):
     return [1]*num_weights
 
-# Returns [num_weights, num_weights -1, ..., 1]
+# Returns [1, 2, ..., num_weights]
 def incrementing_weights(num_weights):
     return list(range(1, num_weights+1))
