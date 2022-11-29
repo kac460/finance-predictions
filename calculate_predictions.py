@@ -5,6 +5,8 @@ import csv
 from hardcoded_predictions import HARDCODED_PREDICTIONS
 from weights_functions import incrementing_weights, weighted_avg
 
+DEFAULT_WEIGHTING_FUNCTION = incrementing_weights
+
 _AMOUNT = 'Amount'
 _CATEGORY = 'Category'
 _TRANSACTIONS_FIRST_ROW = 'Transactions First Row'
@@ -88,7 +90,7 @@ def print_average_expenses(year, month_num):
 Returns a dictionary in the form
 { category (string): prediction (float) }
 '''
-def compute_predictions(year, month_num, weights_function=incrementing_weights):
+def compute_predictions(year, month_num, weights_function=DEFAULT_WEIGHTING_FUNCTION):
     filenames = _get_transaction_filenames(year, month_num)
     if len(filenames) == 0:
         print(f'NO FILES PRE-{month_num}/{year}')
@@ -134,6 +136,7 @@ def main():
         '''
     )
     order_of_categories_copied_split = ORDER_OF_CATEGORIES_COPIED.split('\n')
+    print('COPY/PASTE-ABLE PREDICTIONS')
     for category in order_of_categories_copied_split[1:len(order_of_categories_copied_split)-1]:
         print(final_predictions.get(category.strip().replace('\t', '')))
 
