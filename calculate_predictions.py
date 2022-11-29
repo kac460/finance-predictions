@@ -100,7 +100,7 @@ def compute_predictions(year, month_num, weights_function=incrementing_weights):
 
 def total_expenses_in_file(filename):
     category_expenses = category_expenses_for_file(filename)
-    return sum([expense for category, expense in category_expenses.items()])
+    return sum([expense for expense in category_expenses.values()])
 
 def print_average_expenses(year, month_num):
     filenames = get_transaction_filenames(year, month_num)
