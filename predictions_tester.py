@@ -76,8 +76,8 @@ def avg_category_diffs(weights_function, all_expenses, first_year=START_YEAR, fi
     year_months = months_up_to(today.year, today.month, first_year, first_month)
     monthly_diffs = all_expenses_predictions_diff(weights_function, all_expenses)
     # for any y,m: monthly_diffs[(y,m)] has all the categories
-    # so this is a hacky way of gettin all the categories
-    categories = monthly_diffs[_PLACEHOLDER_MONTH_YEAR]
+    # so this is a hacky way of getting all the categories
+    categories = monthly_diffs[_PLACEHOLDER_MONTH_YEAR].keys()
     num_months = len(monthly_diffs)
     avg_diffs = {
         category: sum(

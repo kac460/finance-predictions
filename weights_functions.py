@@ -9,3 +9,7 @@ def even_weights(num_weights):
 # Returns [1, 2, ..., num_weights]
 def incrementing_weights(num_weights):
     return list(range(1, num_weights+1))
+
+def weighted_avg(vals, weights):
+    assert len(vals) == len(weights)
+    return sum([vals[i]*weights[i] for i in range(len(vals))])/sum(weights)
