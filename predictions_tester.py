@@ -97,16 +97,17 @@ def main():
         incrementing_weights
     ]
     weights_functions_avg_category_diffs = {}
-    weights_functions_avg_category_diffs_2022 = {}
+    weights_functions_avg_category_diffs_curr_year = {}
+    curr_year = date.today().year
     for weights_function in weights_functions_to_test:
         func_name = weights_function.__name__
         weights_functions_avg_category_diffs[func_name] = avg_category_diffs(weights_function, all_expenses)
-        weights_functions_avg_category_diffs_2022[func_name] = avg_category_diffs(weights_function, all_expenses, 2022, 1)
+        weights_functions_avg_category_diffs_curr_year[func_name] = avg_category_diffs(weights_function, all_expenses, curr_year, 1)
     print('---------\n\n\n\n')
     print('AVG CATEGORY DIFFS ALL TIME:')
     pprint(weights_functions_avg_category_diffs)
-    print('AVG CATEGORY DIFFS 2022:')
-    pprint(weights_functions_avg_category_diffs_2022)
+    print(f'AVG CATEGORY DIFFS {curr_year}:')
+    pprint(weights_functions_avg_category_diffs_curr_year)
     print('AVG TOTAL DIFFS ALL TIME:')
     print_total_diffs = lambda diffs: pprint({
         func_name: sum(diffs[func_name].values())
@@ -114,7 +115,7 @@ def main():
     })
     print_total_diffs(weights_functions_avg_category_diffs)
     print('AVG TOTAL DIFFS 2022:')
-    print_total_diffs(weights_functions_avg_category_diffs_2022)
+    print_total_diffs(weights_functions_avg_category_diffs_curr_year)
 
 
 if __name__ == '__main__':
