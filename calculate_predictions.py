@@ -36,8 +36,13 @@ def filename_from_date(year, month_number):
     return TRANSACTION_FILE_FORMAT.format(month, year)
 
 
+'''
+Returns a list of transaction filenames, ordered (asc) by date based on filename
+Note - cutoff_month, cutoff_year is an EXCLUSIVE boundary
+so if we pass 2022, 11, then the last filename returned would be "October 2022 - Transactions.csv"
+'''
 def get_transaction_filenames(cutoff_year, cutoff_month):
-    is_before_cutoff = lambda y, m: y <= cutoff_year and m < cutoff_month
+    is_before_cutoff = lambda y, m: y < cutoff_year or (y==cutoff_year and m < cutoff_month)
     dir_filenames = listdir()
     return list(filter(lambda filename: filename in dir_filenames, [
         filename_from_date(y, m) 
@@ -45,31 +50,6 @@ def get_transaction_filenames(cutoff_year, cutoff_month):
         for m in range(1, 13)
         if is_before_cutoff(y, m)
     ]))
-
-'''
-Returns a list of transaction filenames, ordered (asc) by date based on filename
-Note - cutoff_month, cutoff_year is an EXCLUSIVE boundary
-so if we pass 2022, 11, then the last filename returned would be "October 2022 - Transactions.csv"
-'''
-'''def get_transaction_filenames(cutoff_year, cutoff_month):
-    transaction_filenames = []
-    dir_filenames = listdir()
-    print(f'end year: {cutoff_year}')
-    year = START_YEAR
-    month_num = START_MONTH_NUM
-    while True:
-        while month_num <= 12:
-            if month_num == cutoff_month and year == cutoff_year:
-                return transaction_filenames
-            candidate_filename = filename_from_date(year, month_num)
-            print(candidate_filename)
-            if candidate_filename in dir_filenames:
-                transaction_filenames.append(candidate_filename)
-            else:
-                raise Exception(f'Missing {candidate_filename}')
-            month_num += 1
-        month_num = 1
-        year += 1'''
 
 
 def category_expenses_for_file(filename):
