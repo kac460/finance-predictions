@@ -108,15 +108,13 @@ def main():
     print('AVG CATEGORY DIFFS 2022:')
     pprint(weights_functions_avg_category_diffs_2022)
     print('AVG TOTAL DIFFS ALL TIME:')
-    pprint({
-        func_name: sum(weights_functions_avg_category_diffs[func_name].values())
-        for func_name in weights_functions_avg_category_diffs
+    print_total_diffs = lambda diffs: pprint({
+        func_name: sum(diffs[func_name].values())
+        for func_name in diffs
     })
+    print_total_diffs(weights_functions_avg_category_diffs)
     print('AVG TOTAL DIFFS 2022:')
-    pprint({
-        func_name: sum(weights_functions_avg_category_diffs_2022[func_name].values())
-        for func_name in weights_functions_avg_category_diffs_2022
-    })
+    print_total_diffs(weights_functions_avg_category_diffs_2022)
 
 
 if __name__ == '__main__':
