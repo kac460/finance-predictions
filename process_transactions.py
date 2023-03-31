@@ -1,11 +1,12 @@
 from calendar import month_name
-from os import listdir
+from os import listdir, path
 import csv
 
 _AMOUNT = 'Amount'
 _CATEGORY = 'Category'
 _TRANSACTIONS_FIRST_ROW = 'Transactions First Row'
-_TRANSACTION_FILE_FORMAT = '{} {} - Transactions.csv'
+_TRANSACTIONS_DIR = 'transactions'
+_TRANSACTION_FILE_FORMAT = path.join(_TRANSACTIONS_DIR, '{} {} - Transactions.csv')
 START_YEAR = 2021
 START_MONTH_NUM = 1
 '''
@@ -39,7 +40,10 @@ so if we pass 2022, 11, then the last filename returned would be "October 2022 -
 '''
 def get_transaction_filenames(cutoff_year, cutoff_month):
     is_before_cutoff = lambda y, m: y < cutoff_year or (y==cutoff_year and m < cutoff_month)
-    dir_filenames = listdir()
+    dir_filenames = [
+        path.join(_TRANSACTIONS_DIR, filename) 
+        for filename in listdir(_TRANSACTIONS_DIR)
+    ]
     return list(filter(lambda filename: filename in dir_filenames, [
         _filename_from_date(y, m) 
         for y in range(START_YEAR, cutoff_year+1) 
