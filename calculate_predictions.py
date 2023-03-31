@@ -6,6 +6,8 @@ from process_transactions import (
     total_expenses_in_file,
     category_expenses_for_file
 )
+from categories import CATEGORIES
+
 
 _DEFAULT_WEIGHTING_FUNCTION = incrementing_weights
 
@@ -45,30 +47,9 @@ def main():
     print("RAW:")
     print(final_predictions)
     print("-----------")
-    ORDER_OF_CATEGORIES_COPIED = (
-        '''
-        Rent	
-        Cellphone	
-        Car Insurance	
-        Internet	
-        Electricity/Gas	
-        Water	
-        Groceries	
-        Transportation	
-        Health	
-        Other Necessity	
-        Home	
-        Restaurants	
-        Entertainment	
-        Vacation	
-        Gifts	
-        Other Non-Necessity	
-        '''
-    )
-    order_of_categories_copied_split = ORDER_OF_CATEGORIES_COPIED.split('\n')
     print('COPY/PASTE-ABLE PREDICTIONS')
-    for category in order_of_categories_copied_split[1:len(order_of_categories_copied_split)-1]:
-        print(final_predictions.get(category.strip().replace('\t', '')))
+    for category in CATEGORIES:
+        print(final_predictions.get(category))
 
 
 if __name__ == '__main__':
