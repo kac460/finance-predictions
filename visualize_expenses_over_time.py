@@ -29,19 +29,20 @@ def main():
             category_monthly_expenses[category].append(
                 max(category_expenses.get(category, 0), 0)
             )
-    #plt.plot(dates, total_monthly_expenses)
     categories_sorted = sorted(
         CATEGORIES, 
         key=lambda cat: sum(category_monthly_expenses[cat]),
         reverse=True
     )
+    # BY CATEGORY
+    plt.figure(1)
     for category in categories_sorted:
         plt.plot(
             dates, 
             category_monthly_expenses[category], 
             label=category
         )
-    plt.title('Expenses Over Time')
+    plt.title('Category Monthly Expenses Over Time')
     plt.xlabel('Date')
     plt.ylabel('Expense ($)')
     plt.legend()
@@ -51,6 +52,14 @@ def main():
         [dt.strftime('%m-%Y') for dt in date_ticks],
         rotation=45
     )
+
+    # TOTAL
+    plt.figure(2)
+    plt.plot(dates, total_monthly_expenses)
+    plt.title('Total Monthly Expenses Over Time')
+    plt.xlabel('Date')
+    plt.ylabel('Total Monthly Expense ($)')
+
     plt.show()
 
 
