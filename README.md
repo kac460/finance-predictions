@@ -22,9 +22,10 @@ Run `python3 predictions_tester.py` to see which of the weighting functions has 
 
 ### Visualizing expenses over time
 
-While the main purposes of this repo is to host code for predicting monthly expenses, it also has a script [visualize_expenses_over_time.py](visualize_expenses_over_time.py) for visualizing your monthly total/by category expenses.
+While the main purposes of this repo is to host code for predicting monthly expenses, it also has a script [visualize_expenses_over_time.py](visualize_expenses_over_time.py) for visualizing your monthly total/by category expenses. 
 
 Run `python3 visualize_expenses_over_time.py` and you will get two line charts plotting your monthly total/by category expenses against time. 
 - Note the script assumes you have [matplotlib](https://pypi.org/project/matplotlib/) installed (if you do not have it, install it by running `pip install matplotlib`).
+- Of course, you need to have at least one (but ideally many more) `transactions/` file (as per the instructions in "[Computing predictions](#computing-predictions)") for this script to work.
 
-Fair warning - this part of the repo is a bit of a work in progress, and I am not at all familiar with `matplotlib`, so the code and visualizations are a little messy!
+**Fair warning** - the data viz part of the repo is a bit of a work in progress, and I am not at all familiar with `matplotlib`, so the code and visualizations are a little messy!
