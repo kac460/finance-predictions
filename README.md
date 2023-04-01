@@ -1,6 +1,6 @@
 # finance-predictions
 
-A tool for predicting expenses for the next month.
+A tool for predicting expenses for the next month (with some simple averaging/weighting strategies--nothing fancy, sorry ML fans), with additional scripting for visualizing your expenses over time.
 
 ## Instructions
 
@@ -18,3 +18,13 @@ A tool for predicting expenses for the next month.
 After at least 1 month of using this tool, you can try different weighting functions in `weights_functions.py` to see which function would've done the best at predicting your past expenses. 
 
 Run `python3 predictions_tester.py` to see which of the weighting functions has the best historical performance for your expenses. The default used in `calculate_predictions.py` is (because it was best at predicting my own predictions) but you can change it by changing `DEFAULT_WEIGHTING_FUNCTION` in [calculate_predictions.py](./calculate_predictions.py). 
+
+
+### Visualizing expenses over time
+
+While the main purposes of this repo is to host code for predicting monthly expenses, it also has a script [visualize_expenses_over_time.py](visualize_expenses_over_time.py) for visualizing your monthly total/by category expenses.
+
+Run `python3 visualize_expenses_over_time.py` and you will get two line charts plotting your monthly total/by category expenses against time. 
+- Note the script assumes you have [matplotlib](https://pypi.org/project/matplotlib/) installed (if you do not have it, install it by running `pip install matplotlib`).
+
+Fair warning - this part of the repo is a bit of a work in progress, and I am not at all familiar with `matplotlib`, so the code and visualizations are a little messy!
