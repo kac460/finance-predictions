@@ -12,7 +12,7 @@ A tool for predicting expenses for the next month (with some simple averaging/we
 5. Update [categories.py](./categories.py) to match the categories (including the exact order!) shown on your Google Sheet's `Summary` sheet.
 6. Run `python3 calculate_predictions.py`
 7. The script will use all the `<MonthName> <YYYY> - Transactions.csv` files in your `transactions/` dir as well as `hardcoded_predictions.py` to predict expenses for each category (printed to standard output)
-9. For the next month, create a copy of the sheet you made in the previous instructions, clearing the transactions your reorded under the `Transactions` sheet.
+9. For your next month, create a copy of the sheet you made in the previous instructions, clearing the transactions your reorded under the `Transactions` sheet.
 10. Copy/paste the `COPY/PASTE-ABLE PREDICTIONS` into your next month's transactions Google Sheet in the `Summary` sheet's `Expenses` section
 
 ### Improving the predictions
