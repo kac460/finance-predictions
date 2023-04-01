@@ -64,6 +64,7 @@ def main():
         [dt.strftime('%m-%Y') for dt in date_ticks],
         rotation=45
     )
+    plt.yticks([n*500 for n in range(4, 16)])
     plt.show()
 
 
