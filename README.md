@@ -30,4 +30,4 @@ Run `python3 visualize_expenses_over_time.py` and you will get two line charts p
 - Note the script assumes you have [matplotlib](https://pypi.org/project/matplotlib/) installed (if you do not have it, install it by running `pip install matplotlib`).
 - Of course, you need to have at least one (but ideally many more than one) `transactions/` file (as per the instructions in "[Computing predictions](#computing-predictions)") for this script to work.
 
-**Fair warning** - the data viz part of the repo is a bit of a work in progress (I just wanted to get something working asap), and I am not at all familiar with `matplotlib`, so the code and visualizations are a little messy!
+**Fair warning** - the data viz part of the repo is a bit of a work in progress (I just wanted to get something working ASAP), and I am not at all familiar with `matplotlib`, so the code and visualizations are a little messy!
