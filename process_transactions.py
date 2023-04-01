@@ -6,7 +6,8 @@ _AMOUNT = 'Amount'
 _CATEGORY = 'Category'
 _TRANSACTIONS_FIRST_ROW = 'Transactions First Row'
 _TRANSACTIONS_DIR = 'transactions'
-_TRANSACTION_FILE_FORMAT = path.join(_TRANSACTIONS_DIR, '{} {} - Transactions.csv')
+TRANSACTIONS_FILE_SUFFIX = ' - Transactions.csv'
+_TRANSACTIONS_FILE_FORMAT = path.join(_TRANSACTIONS_DIR, '{} {}' + TRANSACTIONS_FILE_SUFFIX)
 START_YEAR = 2021
 START_MONTH_NUM = 1
 '''
@@ -30,7 +31,7 @@ def _get_category_amount_transaction_indexes(filename):
 
 def _filename_from_date(year, month_number):
     month = month_name[month_number]
-    return _TRANSACTION_FILE_FORMAT.format(month, year)
+    return _TRANSACTIONS_FILE_FORMAT.format(month, year)
 
 
 '''
