@@ -7,19 +7,19 @@ from process_transactions import (
     TRANSACTIONS_FILE_SUFFIX
 )
 from os import path
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 _MONTH_YEAR_FORMAT = '%B %Y'
 
 def main():
-    today = date.today()
+    tomorrow = date.today() + timedelta(days=1)
     dates: list[datetime] = []
     total_monthly_expenses = []
     category_monthly_expenses = {
         category: []
         for category in CATEGORIES
     }
-    for filename in get_transaction_filenames(today.year, today.month):
+    for filename in get_transaction_filenames(tomorrow.year, tomorrow.month):
         month_year = path.split(filename)[1].replace(TRANSACTIONS_FILE_SUFFIX, '')
         file_date = datetime.strptime(month_year, _MONTH_YEAR_FORMAT)
         dates.append(file_date)
@@ -35,7 +35,7 @@ def main():
         reverse=True
     )
     # BY CATEGORY
-    plt.figure(1)
+    plt.figure('Monthly By Category')
     for category in categories_sorted:
         plt.plot(
             dates, 
@@ -54,12 +54,16 @@ def main():
     )
 
     # TOTAL
-    plt.figure(2)
+    plt.figure('Monthly Total')
     plt.plot(dates, total_monthly_expenses)
     plt.title('Total Monthly Expenses Over Time')
     plt.xlabel('Date')
     plt.ylabel('Total Monthly Expense ($)')
-
+    plt.xticks(
+        date_ticks, 
+        [dt.strftime('%m-%Y') for dt in date_ticks],
+        rotation=45
+    )
     plt.show()
 
 

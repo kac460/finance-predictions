@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 from hardcoded_predictions import HARDCODED_PREDICTIONS
 from weights_functions import incrementing_weights, weighted_avg
 from process_transactions import (
@@ -40,9 +40,9 @@ def compute_predictions(year, month_num, weights_function=_DEFAULT_WEIGHTING_FUN
 
 
 def main():
-    today = date.today()
-    final_predictions = compute_predictions(today.year, today.month)
-    print_average_expenses(today.year, today.month)
+    tomorrow = date.today() + timedelta(days=1)
+    final_predictions = compute_predictions(tomorrow.year, tomorrow.month)
+    print_average_expenses(tomorrow.year, tomorrow.month)
 
     print("RAW:")
     print(final_predictions)
