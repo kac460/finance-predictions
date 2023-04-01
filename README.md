@@ -1,6 +1,6 @@
 # finance-predictions
 
-A tool for predicting expenses for the next month (with some simple averaging/weighting strategies--nothing fancy, sorry ML fans), with additional scripting for visualizing your expenses over time.
+A tool for predicting expenses for the next month (with some simple averaging/weighting strategies--nothing fancy--sorry, ML fans!), with additional scripting for visualizing your expenses over time.
 
 ## Instructions
 
