@@ -3,7 +3,9 @@ from weights_functions import exponential_weights, even_weights, incrementing_we
 from hardcoded_predictions import HARDCODED_PREDICTIONS
 from calculate_predictions import (
     compute_predictions, 
-    category_expenses_for_month,
+)
+from process_transactions import (
+    category_expenses_for_month, 
     START_YEAR,
     START_MONTH_NUM
 )
