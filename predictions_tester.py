@@ -1,3 +1,5 @@
+from typing import Callable
+from pprint import pprint
 from datetime import date
 from weights_functions import exponential_weights, even_weights, incrementing_weights
 from hardcoded_predictions import HARDCODED_PREDICTIONS
@@ -9,10 +11,15 @@ from process_transactions import (
     START_YEAR,
     START_MONTH_NUM
 )
-from pprint import pprint
+
 
 # returns (year, month_num) for (start_year, start_month_num) <= (year, month_num) < (end_year, end_month)}
-def months_up_to(end_year, end_month_num, start_year=START_YEAR, start_month_num=START_MONTH_NUM):
+def months_up_to(
+    end_year: int,
+    end_month_num: int, 
+    start_year: int = START_YEAR, 
+    start_month_num: int = START_MONTH_NUM
+) -> list[tuple[int, int]]:
     start_year_months = [m for m in range(start_month_num, 13)]
     start_year_months = [(start_year, m) for m in start_year_months]
     middle_years = [y for y in range(start_year+1, end_year)]
@@ -24,7 +31,7 @@ def months_up_to(end_year, end_month_num, start_year=START_YEAR, start_month_num
 
 
 # returns {(year, month_num): compute_predictions(year, month_num) | (START_YEAR, START_MONTH_NUM) <= (year, month_num) < today }
-def predictions_for_every_month(weights_function):
+def predictions_for_every_month(weights_function: Callable) -> dict[tuple[int, int], dict[str, float]]:
     today = date.today()
     months_up_to_today = months_up_to(today.year, today.month)
     all_predictions = {
@@ -33,7 +40,7 @@ def predictions_for_every_month(weights_function):
     return all_predictions
 
 
-def expenses_for_every_month():
+def expenses_for_every_month() -> dict[tuple[int, int], dict[str, float]]:
     today = date.today()
     months_up_to_today = months_up_to(today.year, today.month)
     all_expenses = {
@@ -41,7 +48,7 @@ def expenses_for_every_month():
     }
     return all_expenses
 
-def month_expenses_predictions_diff(month_expenses, month_predictions, ignore_hardcoded=True):
+def month_expenses_predictions_diff(month_expenses: dict[str, float], month_predictions: dict[str, float], ignore_hardcoded: bool = True):
     diffs = {}
     for category in month_predictions:
         # HARDCODED_PREDICTIONS have changed over the years (e.g. rent increased)
@@ -58,7 +65,7 @@ def month_expenses_predictions_diff(month_expenses, month_predictions, ignore_ha
     return diffs
 
 
-def all_expenses_predictions_diff(weights_function, all_expenses):
+def all_expenses_predictions_diff(weights_function: Callable, all_expenses):  # TODO
     all_predictions = predictions_for_every_month(weights_function)
     all_diffs = {}
     for year_month in all_expenses:

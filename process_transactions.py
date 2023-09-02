@@ -14,7 +14,7 @@ START_MONTH_NUM = 1
 Returns the column indexes of Amount/Category in the given file
 and the row index of the first transactions row
 '''
-def _get_category_amount_transaction_indexes(filename):
+def _get_category_amount_transaction_indexes(filename: str) -> dict[str, int]:
     row_num = 0
     with open(filename) as f:
         for line in f.readlines():
@@ -29,7 +29,7 @@ def _get_category_amount_transaction_indexes(filename):
     raise Exception(f'Could not find {_AMOUNT} and {_CATEGORY} in {filename}')
 
 
-def _filename_from_date(year, month_number):
+def _filename_from_date(year: int, month_number: int) -> str:
     month = month_name[month_number]
     return _TRANSACTIONS_FILE_FORMAT.format(month, year)
 
@@ -39,7 +39,7 @@ Returns a list of transaction filenames, ordered (asc) by date based on filename
 Note - cutoff_month, cutoff_year is an EXCLUSIVE boundary
 so if we pass 2022, 11, then the last filename returned would be "October 2022 - Transactions.csv"
 '''
-def get_transaction_filenames(cutoff_year, cutoff_month):
+def get_transaction_filenames(cutoff_year: int, cutoff_month: int) -> list[str]:
     is_before_cutoff = lambda y, m: y < cutoff_year or (y==cutoff_year and m < cutoff_month)
     dir_filenames = [
         path.join(_TRANSACTIONS_DIR, filename) 
@@ -53,7 +53,7 @@ def get_transaction_filenames(cutoff_year, cutoff_month):
     ]))
 
 
-def category_expenses_for_file(filename):
+def category_expenses_for_file(filename: str) -> dict[str, float]:
     print(f'file: {filename}')
     category_expenses = {}
     indexes = _get_category_amount_transaction_indexes(filename)
@@ -69,11 +69,11 @@ def category_expenses_for_file(filename):
     return category_expenses
 
 
-def category_expenses_for_month(year, month_num):
+def category_expenses_for_month(year: int, month_num: int) -> dict[str, float]:
     filename = _filename_from_date(year, month_num)
     return category_expenses_for_file(filename)
 
 
-def total_expenses_in_file(filename):
+def total_expenses_in_file(filename: str) -> float:
     category_expenses = category_expenses_for_file(filename)
     return sum([expense for expense in category_expenses.values()])

@@ -1,3 +1,4 @@
+from typing import Callable
 from datetime import date, timedelta
 from hardcoded_predictions import HARDCODED_PREDICTIONS
 from weights_functions import incrementing_weights, weighted_avg
@@ -11,7 +12,7 @@ from categories import CATEGORIES
 
 _DEFAULT_WEIGHTING_FUNCTION = incrementing_weights
 
-def print_average_expenses(year, month_num):
+def print_average_expenses(year: int, month_num: int) -> None:
     filenames = get_transaction_filenames(year, month_num)
     print("-----------\n")
     print(f'AVERAGE MONTHLY EXPENSE: {sum([total_expenses_in_file(filename) for filename in filenames])/len(filenames)}')
@@ -22,7 +23,7 @@ def print_average_expenses(year, month_num):
 Returns a dictionary in the form
 { category (string): prediction (float) }
 '''
-def compute_predictions(year, month_num, weights_function=_DEFAULT_WEIGHTING_FUNCTION):
+def compute_predictions(year: int, month_num: int, weights_function: Callable=_DEFAULT_WEIGHTING_FUNCTION) -> dict[str, float]:
     filenames = get_transaction_filenames(year, month_num)
     if len(filenames) == 0:
         print(f'NO FILES PRE-{month_num}/{year}')
