@@ -116,7 +116,7 @@ def main():
         for func_name in diffs
     })
     print_total_diffs(weights_functions_avg_category_diffs)
-    print('AVG TOTAL DIFFS 2022:')
+    print(f'AVG TOTAL DIFFS {curr_year}:')
     print_total_diffs(weights_functions_avg_category_diffs_curr_year)
 
 
