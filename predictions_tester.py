@@ -1,9 +1,6 @@
 from datetime import date
 from weights_functions import exponential_weights, even_weights, incrementing_weights
 from hardcoded_predictions import HARDCODED_PREDICTIONS
-from calculate_predictions import (
-    compute_predictions, 
-)
 from process_transactions import (
     category_expenses_for_month, 
     START_YEAR,
@@ -25,6 +22,7 @@ def months_up_to(end_year, end_month_num, start_year=START_YEAR, start_month_num
 
 # returns {(year, month_num): compute_predictions(year, month_num) | (START_YEAR, START_MONTH_NUM) <= (year, month_num) < today }
 def predictions_for_every_month(weights_function):
+    from calculate_predictions import compute_predictions
     today = date.today()
     months_up_to_today = months_up_to(today.year, today.month)
     all_predictions = {
@@ -91,7 +89,7 @@ def avg_category_diffs(weights_function, all_expenses, first_year=START_YEAR, fi
     return avg_diffs
 
 
-def main():
+def best_weights_function():
     all_expenses = expenses_for_every_month()
     weights_functions_to_test = [
         exponential_weights,
@@ -99,25 +97,33 @@ def main():
         incrementing_weights
     ]
     weights_functions_avg_category_diffs = {}
-    weights_functions_avg_category_diffs_curr_year = {}
-    curr_year = date.today().year
+    weights_functions_avg_category_diffs_last_12m = {}
+    last_year = date.today().year - 1
+    curr_month = date.today().month
     for weights_function in weights_functions_to_test:
-        func_name = weights_function.__name__
-        weights_functions_avg_category_diffs[func_name] = avg_category_diffs(weights_function, all_expenses)
-        weights_functions_avg_category_diffs_curr_year[func_name] = avg_category_diffs(weights_function, all_expenses, curr_year, 1)
+        weights_functions_avg_category_diffs[weights_function] = avg_category_diffs(weights_function, all_expenses)
+        weights_functions_avg_category_diffs_last_12m[weights_function] = avg_category_diffs(weights_function, all_expenses, last_year, 1)
     print('---------\n\n\n\n')
     print('AVG CATEGORY DIFFS ALL TIME:')
     pprint(weights_functions_avg_category_diffs)
-    print(f'AVG CATEGORY DIFFS {curr_year}:')
-    pprint(weights_functions_avg_category_diffs_curr_year)
+    print(f'AVG CATEGORY DIFFS since {curr_month}/{last_year}:')
+    pprint(weights_functions_avg_category_diffs_last_12m)
     print('AVG TOTAL DIFFS ALL TIME:')
     print_total_diffs = lambda diffs: pprint({
         func_name: sum(diffs[func_name].values())
         for func_name in diffs
     })
     print_total_diffs(weights_functions_avg_category_diffs)
-    print(f'AVG TOTAL DIFFS {curr_year}:')
-    print_total_diffs(weights_functions_avg_category_diffs_curr_year)
+    print(f'AVG TOTAL DIFFS since {curr_month}/{last_year}::')
+    print_total_diffs(weights_functions_avg_category_diffs_last_12m)
+    return min(
+        weights_functions_avg_category_diffs_last_12m, 
+        key=lambda func: sum(weights_functions_avg_category_diffs_last_12m[func].values())
+    )
+
+
+def main():
+    print(f'best: {best_weights_function()}')
 
 
 if __name__ == '__main__':

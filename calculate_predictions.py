@@ -1,15 +1,12 @@
 from datetime import date, timedelta
 from hardcoded_predictions import HARDCODED_PREDICTIONS
-from weights_functions import incrementing_weights, weighted_avg
 from process_transactions import (
     get_transaction_filenames,
     total_expenses_in_file,
     category_expenses_for_file
 )
+from weights_functions import weighted_avg
 from categories import CATEGORIES
-
-
-_DEFAULT_WEIGHTING_FUNCTION = incrementing_weights
 
 def print_average_expenses(year, month_num):
     filenames = get_transaction_filenames(year, month_num)
@@ -22,7 +19,7 @@ def print_average_expenses(year, month_num):
 Returns a dictionary in the form
 { category (string): prediction (float) }
 '''
-def compute_predictions(year, month_num, weights_function=_DEFAULT_WEIGHTING_FUNCTION):
+def compute_predictions(year, month_num, weights_function):
     filenames = get_transaction_filenames(year, month_num)
     if len(filenames) == 0:
         print(f'NO FILES PRE-{month_num}/{year}')
@@ -40,8 +37,15 @@ def compute_predictions(year, month_num, weights_function=_DEFAULT_WEIGHTING_FUN
 
 
 def main():
+    # avoid circular importing
+    from predictions_tester import best_weights_function
     tomorrow = date.today() + timedelta(days=1)
-    final_predictions = compute_predictions(tomorrow.year, tomorrow.month)
+    weights_func = best_weights_function()
+    final_predictions = compute_predictions(
+        tomorrow.year, 
+        tomorrow.month, 
+        weights_func
+    )
     print_average_expenses(tomorrow.year, tomorrow.month)
 
     print("RAW:")
@@ -50,6 +54,8 @@ def main():
     print('COPY/PASTE-ABLE PREDICTIONS')
     for category in CATEGORIES:
         print(final_predictions.get(category))
+    print("-----------")
+    print(f'Best weight function: {weights_func.__name__}')
 
 
 if __name__ == '__main__':
