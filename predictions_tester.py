@@ -16,16 +16,21 @@ from pprint import pprint
 
 # returns (year, month_num) for (start_year, start_month_num) <= (year, month_num) < (end_year, end_month)}
 def months_up_to(
-    end_year, end_month_num, start_year=START_YEAR, start_month_num=START_MONTH_NUM
-):
-    start_year_months = [m for m in range(start_month_num, 13)]
-    start_year_months = [(start_year, m) for m in start_year_months]
-    middle_years = [y for y in range(start_year + 1, end_year)]
-    middle_months = [m for m in range(1, 13)]
-    middle_years_months = [(y, m) for y in middle_years for m in middle_months]
-    final_year_months = [m for m in range(1, end_month_num)]
-    final_year_months = [(end_year, m) for m in final_year_months]
-    return start_year_months + middle_years_months + final_year_months
+    end_year: int, 
+    end_month_num: int, 
+    start_year: int = START_YEAR, 
+    start_month_num: int = START_MONTH_NUM,
+) -> list[tuple[int, int]]:
+    year_months: list[tuple[int, int]] = []
+    for year in range(start_year, end_year + 1):
+        for month_num in range(1, 13):
+            if month_num < start_month_num and year == start_year:
+                continue
+            elif month_num == end_month_num and year == end_year:
+                break
+            else:
+                year_months.append((year, month_num))
+    return year_months
 
 
 # returns {(year, month_num): compute_predictions(year, month_num) | (START_YEAR, START_MONTH_NUM) <= (year, month_num) < today }
@@ -44,6 +49,7 @@ def predictions_for_every_month(weights_function):
 def expenses_for_every_month():
     today = date.today()
     months_up_to_today = months_up_to(today.year, today.month)
+    print(f'months_up_to_today: {months_up_to_today}')
     all_expenses = {
         year_month: category_expenses_for_month(*year_month)
         for year_month in months_up_to_today
@@ -87,7 +93,7 @@ def all_expenses_predictions_diff(weights_function, all_expenses):
     return all_diffs
 
 
-_PLACEHOLDER_MONTH_YEAR = (2022, 9)
+_PLACEHOLDER_MONTH_YEAR = (2026, 4)
 
 
 def avg_category_diffs(

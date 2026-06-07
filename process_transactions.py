@@ -8,8 +8,8 @@ _TRANSACTIONS_FIRST_ROW = 'Transactions First Row'
 _TRANSACTIONS_DIR = 'transactions'
 TRANSACTIONS_FILE_SUFFIX = ' - Transactions.csv'
 _TRANSACTIONS_FILE_FORMAT = path.join(_TRANSACTIONS_DIR, '{} {}' + TRANSACTIONS_FILE_SUFFIX)
-START_YEAR = 2021
-START_MONTH_NUM = 1
+START_YEAR = 2026
+START_MONTH_NUM = 3
 '''
 Returns the column indexes of Amount/Category in the given file
 and the row index of the first transactions row
