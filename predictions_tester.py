@@ -10,8 +10,10 @@ from process_transactions import (
     category_expenses_for_month,
     START_YEAR,
     START_MONTH_NUM,
+    filename_from_date
 )
 from pprint import pprint
+from pathlib import Path
 
 
 # returns (year, month_num) for (start_year, start_month_num) <= (year, month_num) < (end_year, end_month)}
@@ -53,8 +55,13 @@ def expenses_for_every_month():
     all_expenses = {
         year_month: category_expenses_for_month(*year_month)
         for year_month in months_up_to_today
+        if file_exists(*year_month)
     }
     return all_expenses
+
+
+def file_exists(year: int, month: int) -> bool:
+    return Path(filename_from_date(year, month)).is_file()
 
 
 def month_expenses_predictions_diff(

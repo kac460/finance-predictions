@@ -29,7 +29,7 @@ def _get_category_amount_transaction_indexes(filename):
     raise Exception(f'Could not find {_AMOUNT} and {_CATEGORY} in {filename}')
 
 
-def _filename_from_date(year, month_number):
+def filename_from_date(year, month_number):
     month = month_name[month_number]
     return _TRANSACTIONS_FILE_FORMAT.format(month, year)
 
@@ -46,7 +46,7 @@ def get_transaction_filenames(cutoff_year, cutoff_month):
         for filename in listdir(_TRANSACTIONS_DIR)
     ]
     return list(filter(lambda filename: filename in dir_filenames, [
-        _filename_from_date(y, m) 
+        filename_from_date(y, m) 
         for y in range(START_YEAR, cutoff_year+1) 
         for m in range(1, 13)
         if is_before_cutoff(y, m)
@@ -70,7 +70,7 @@ def category_expenses_for_file(filename):
 
 
 def category_expenses_for_month(year, month_num):
-    filename = _filename_from_date(year, month_num)
+    filename = filename_from_date(year, month_num)
     return category_expenses_for_file(filename)
 
 
