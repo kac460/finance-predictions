@@ -52,6 +52,10 @@ def get_transaction_filenames(cutoff_year, cutoff_month):
         if is_before_cutoff(y, m)
     ]))
 
+_PROBLEMATIC_CHARS = {'$', '"', ','}
+def _remove_problematic_chars_from_cell(cell: str) -> str:
+    return ''.join([char for char in cell if char not in _PROBLEMATIC_CHARS])
+
 
 def category_expenses_for_file(filename):
     print(f'file: {filename}')
@@ -65,7 +69,7 @@ def category_expenses_for_file(filename):
         for row in csv.reader(lines[first_transaction_row:]):
             category = row[category_column_index]
             amount = row[amount_column_index]
-            category_expenses[category] = category_expenses.get(category, 0) + float(amount.strip('-$"').replace(',', ''))
+            category_expenses[category] = category_expenses.get(category, 0) + float(_remove_problematic_chars_from_cell(amount))
     return category_expenses
 
 
